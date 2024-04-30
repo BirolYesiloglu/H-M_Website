@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <title>Product Detail</title>
+</head>
+<body>
+    <header>
+        <nav class="navbar mb-5">
+            <div class="navbar-logo">
+                <a href="/"><img src="{{ url_for('static', filename='images/H&M-Logo.png') }}" alt="Logo"></a>
+            </div>
+            <div class="navbar-menu">
+                <a href="/women">Kadın</a>
+                <a href="/men">Erkek</a>
+                <a href="/divided">Divided</a>
+                <a href="/baby">Bebek</a>
+                <a href="/kids">Çocuk</a>
+                <a href="/home">H&M HOME</a>
+                <a href="/sport">Spor</a>
+                <a href="/sale">İndirim</a>
+            </div>
+            <div class="navbar-search">
+                <form action="{{ url_for('search') }}" method="get">
+                    <input type="search" name="searchKey" placeholder="Ürün ara">
+                    <button type="submit">Search</button>
+                </form>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar for Categories -->
+            <aside class="col-md-3">
+                <div class="categories-panel">
+                    <ul class="list-group">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Hepsi
+                            <a href="{{ url_for('search') }}" class="badge bg-primary rounded-pill">32</a>
+                            <span class="badge bg-primary rounded-pill"></span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Kadın
+                            <a href="{{ url_for('search') }}" class="badge bg-primary rounded-pill">16</a>
+                            <span class="badge bg-primary rounded-pill"></span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Erkek
+                            <a href="{{ url_for('search') }}" class="badge bg-primary rounded-pill">16</a>
+                            <span class="badge bg-primary rounded-pill"></span>
+                        </li>
+                        <!-- Add other categories similarly -->
+                    </ul>
+                </div>
+            </aside>
+
+            <section class="col-md-9">
+                <div class="search-results-container">
+                    <!-- Add a form for sorting and filtering -->
+                    <form method="get" class="sorting-filtering-form" action="{{ url_for('handle_search') }}">
+                        <label for="search_key">Search:</label>
+                        <input type="text" id="search_key" name="search_key">
+                        
+                        <label for="sort_by">Sort by:</label>
+                        <select name="sort_by" id="sort_by">
+                            <option value="price_asc">Price (Low to High)</option>
+                            <option value="price_desc">Price (High to Low)</option>
+                        </select>
+                        
+                        <label for="size_filter">Size:</label>
+                        <select name="size_filter" id="size_filter">
+                            <option value="">All sizes</option>
+                            <option value="XS">XS</option>
+                            <option value="S">S</option>
+                            <option value="M">M</option>
+                            <option value="L">L</option>
+                            <option value="XL">XL</option>
+                        </select>
+                        
+                        <input type="submit" value="Apply">
+                    </form>
+                    
+                    <div class="products">
+                        {% for product in products %}
+                            <div class="product-card">
+                                <img src="{{ url_for('static', filename='images/products/' ~ product.image_filename) }}" alt="{{ product.name }}">
+                                <div class="product-info">
+                                    <h5>{{ product.name }}</h5>
+                                    <p>{{ product.price }} TL</p>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    
+                </div>
+                <!-- Product Listings -->
+                <div class="product-images w-100 row">
+                    {% for product in rows %}
+                        <div class="col-lg-4 col-md-6 mb-4">
+                            <div class="product-card p-3">
+                                <img src="{{ url_for('static', filename=product.image_filename) }}" alt="{{ product.name }}" class="img-fluid">
+                                <h2>{{ product.name }}</h2>
+                                <p>{{ product.price }}</p>
+                                <a href="{{ url_for('product_detail', product_id=product.id) }}">View Details</a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

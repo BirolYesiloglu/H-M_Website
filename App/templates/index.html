@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <title>Your Website</title>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="navbar-logo">
+                <a href="/"><img src="{{ url_for('static', filename='images/H&M-Logo.png') }}" alt="Logo"></a>
+            </div>
+            <div class="navbar-menu">
+                <a href="{{ url_for('filter_category', category='women') }}">Kadın</a>
+                <a href="{{ url_for('filter_category', category='men') }}">Erkek</a>
+                <a href="{{ url_for('filter_category', category='divided') }}">Divided</a>
+                <a href="{{ url_for('filter_category', category='baby') }}">Bebek</a>
+                <a href="{{ url_for('filter_category', category='kids') }}">Çocuk</a>
+                <a href="{{ url_for('filter_category', category='home') }}">H&M HOME</a>
+                <a href="{{ url_for('filter_category', category='sport') }}">Spor</a>
+                <a href="{{ url_for('filter_category', category='sale') }}">İndirim</a>
+            </div>
+            <div class="navbar-search">
+                <form action="{{ url_for('search') }}" method="get">
+                    <input type="search" name="searchKey" placeholder="Ürün ara">
+                    <button type="submit">Search</button>
+                </form>
+            </div>
+        </nav>
+    </header>
+
+    <section id="product">
+        <div class="category-bar">
+            <h1>Ürünler</h1>
+            {% for category in unique_categories %}
+                <button class="category-button" onclick="filterCategory('{{ category }}')">{{ category }}</button>
+            {% endfor %}
+        </div>
+        <div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
+            <!-- Indicators/dots -->
+            <div class="carousel-indicators">
+                {% for i in range(slides|length) %}
+                <button type="button" data-bs-target="#productCarousel" data-bs-slide-to="{{ i }}" {% if loop.first %}class="active" aria-current="true"{% endif %} aria-label="Slide {{ i + 1 }}"></button>
+                {% endfor %}
+            </div>
+
+            <!-- The slideshow/carousel -->
+            <div class="carousel-inner">
+                {% for slide in slides %}
+                <div class="carousel-item {% if loop.first %}active{% endif %}">
+                    <div class="row">
+                        {% for product in slide %}
+                        <div class="col-lg-3">
+                            <a href="{{ url_for('product_detail', product_id=product.id) }}" class="product-card-link">
+                                <div class="product-card">
+                                    <img src="{{ url_for('static', filename=product.image_filename) }}" alt="{{ product.name }}" class="img-fluid">
+                                    <h5 class="product-name">{{ product.name }}</h5>
+                                    <p class="product-price">{{ product.price }} TL</p>
+                                </div>
+                            </a>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Left and right controls/icons -->
+            <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </section>
+
+    <!-- Bootstrap JS and its dependencies -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    function filterCategory(category) {
+        fetch(`/filter-category?category=${category}`)
+        .then(response => response.json())
+        .then(data => {
+            updateProductDisplay(data);
+        })
+        .catch(error => console.error('Error fetching data:', error));
+    }
+
+    function updateProductDisplay(products) {
+    const productContainer = document.querySelector('#productCarousel .carousel-inner');
+    productContainer.innerHTML = ''; // Clear current products
+
+    if (products.length === 0) {
+        productContainer.innerHTML = '<div class="carousel-item active"><p>No products found.</p></div>';
+        return;
+    }
+
+    let productHTML = '';
+    products.forEach((product, index) => {
+        if (index % 4 === 0) {  // Change this number to display more or fewer products per slide
+            const activeClass = index === 0 ? 'active' : ''; // Set the first item as active
+            productHTML += `<div class="carousel-item ${activeClass}"><div class="row">`;
+        }
+
+        productHTML += `
+            <div class="col-lg-3">
+                <a href="/product/${product.id}" class="product-card-link">
+                    <div class="product-card">
+                        <img src="/static/${product.image_filename}" alt="${product.name}" class="img-fluid">
+                        <h5>${product.name}</h5>
+                        <p>${product.price} TL</p>
+                    </div>
+                </a>
+            </div>`;
+
+        if (index % 4 === 3 || index === products.length - 1) {  // Close the row and item divs
+            productHTML += `</div></div>`;
+        }
+        });
+
+        productContainer.innerHTML = productHTML; // Add new products
+    }
+
+    </script>
+</body>
+</html>

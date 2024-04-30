@@ -1,0 +1,147 @@
+/* Basic reset to remove margin, padding, and set default font */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    color: #333; /* Default text color */
+    background-color: #f4f4f4; /* Light grey background */
+    text-align: center; /* Center text globally */
+}
+
+.product-card {
+    width: 100%;  /* Adjust width to fit the slider viewport */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    background-color: #fff;
+    text-align: center;
+    margin: 10px; /* Adjust or remove margin if needed */
+}
+
+.search-results-container {
+    margin-top: 20px;  /* Adjust as needed */
+}
+
+.product-name {
+    font-size: 18px;
+    color: #333;
+    margin-top: 10px;
+}
+
+.product-price {
+    font-size: 16px;
+    color: #666;
+    margin-top: 5px;
+}
+
+.navbar-logo img {
+    height: 50px; /* Logo size */
+    margin: 10px; /* Adjust margin to center the logo */
+}
+
+.navbar-menu a {
+    text-decoration: none;
+    color: black;
+    margin: 0 10px;
+    font-weight: bold;
+}
+
+.navbar-search {
+    position: relative;
+}
+
+.navbar-search input {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.navbar-search button {
+    padding: 5px 10px;
+    cursor: pointer;
+    border: none;
+    background-color: #5c67f2; /* Blue button */
+    color: white;
+    border-radius: 4px;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+/* Category bar at the top of product listing */
+.category-bar {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.category-button {
+    border: none;
+    background-color: #f8f8f8;
+    padding: 10px 20px;
+    margin: 0 5px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+.category-button:hover {
+    background-color: #e2e2e2; /* Slightly darker on hover */
+}
+
+.category-card:hover {
+    transform: scale(1.05);
+    transition: transform .2s;
+}
+
+.categories-panel ul {
+    list-style: none;
+    padding: 0;
+}
+
+.categories-panel li {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+.list-group-item {
+    background-color: transparent;
+    border: none;
+}
+
+.list-group-item:hover {
+    background-color: #f8f9fa;
+}
+
+.badge {
+    background-color: #007bff; /* Bootstrap primary color */
+}
+
+.product-card img {
+    width: 100%;
+    height: auto;
+}
+
+.product-details {
+    text-align: center;
+}
+
+/* If you want to add a favorite or like icon, you can position it absolutely within the product card */
+.favorite-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+}
+
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .navbar-menu a {
+        display: block;
+        margin: 10px 0;
+    }
+
+    .navbar-logo img {
+        height: 40px;
+    }
+}
